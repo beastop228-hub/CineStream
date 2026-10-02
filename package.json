@@ -15,6 +15,7 @@
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^1.47.0",
     "next": "^16.3.8",
+    "postcss-preset-env": "^11.6.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-player": "^3.4.0",
@@ -33,13 +34,11 @@
     "typescript": "^5"
   },
   "browserslist": [
-    "chrome >= 69",
-    "safari >= 12",
-    "firefox >= 68",
+    "chrome >= 60",
+    "safari >= 11",
+    "firefox >= 60",
     "edge >= 79",
-    "ios >= 12",
-    "samsung >= 10",
-    "last 2 versions",
-    "not dead"
+    "samsung >= 7",
+    "> 0.5%"
   ]
 }

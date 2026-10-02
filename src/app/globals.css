@@ -24,6 +24,36 @@ body {
   overscroll-behavior-y: none; /* Prevent bounce on TVs */
 }
 
+/* 
+  CRITICAL FALLBACK CSS RESET
+  Ensures that if Tailwind v4 completely fails to compile on legacy TV browsers,
+  basic HTML elements NEVER show default blue links, purple visited links, or bullets.
+*/
+a, a:visited, a:hover, a:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 
+  SMART TV HARDWARE LAG KILLER
+  When the JS detects a TV, it adds data-is-tv="true" to the HTML tag.
+  We then strip all hardware-accelerated blur filters to prevent the TV GPU from choking.
+*/
+html[data-is-tv="true"] .backdrop-blur-sm,
+html[data-is-tv="true"] .backdrop-blur-md,
+html[data-is-tv="true"] .backdrop-blur-lg,
+html[data-is-tv="true"] .backdrop-blur-xl {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-color: rgba(15, 15, 15, 0.95) !important;
+}
+
 /* TV Spatial Navigation Focus Rings (10-Foot UI) */
 /* Map :hover to :focus-visible for a unified, high-contrast D-Pad experience */
 .tv-focus {

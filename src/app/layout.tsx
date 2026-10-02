@@ -3,7 +3,13 @@ import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { MediaDetailsModal } from "@/components/media/MediaDetailsModal";
+import dynamic from "next/dynamic";
+import { ClientTVDetector } from "@/components/ClientTVDetector";
+
+// Wrap non-essential dynamic widgets in next/dynamic to prevent hydration blocking on legacy TVs
+const MediaDetailsModal = dynamic(
+  () => import("@/components/media/MediaDetailsModal").then((mod) => mod.MediaDetailsModal)
+);
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -49,8 +55,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 margin: 0;
                 padding: 0;
               }
+              /* Extreme fallback resets if Tailwind fails */
+              a { color: inherit !important; text-decoration: none !important; }
+              ul, ol { list-style: none !important; padding: 0 !important; margin: 0 !important; }
               img { max-width: 100%; height: auto; }
-              a { color: #fff; }
               /* TV overscan safe zone */
               @media (min-width: 1920px) {
                 body { padding: 3vh 5vw; }
@@ -60,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="flex min-h-full flex-col bg-background text-text-primary">
+        <ClientTVDetector />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
