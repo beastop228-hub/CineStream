@@ -20,6 +20,7 @@ export function MediaDetailsModal() {
   const [error, setError] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [episodes, setEpisodes] = useState<any[]>([]);
+  const [omdbData, setOmdbData] = useState<any | null>(null);
 
   const [emblaRef] = useEmblaCarousel({
     dragFree: true,
@@ -43,6 +44,7 @@ export function MediaDetailsModal() {
       // Reset state when closing
       setTimeout(() => {
         setData(null);
+        setOmdbData(null);
         setSelectedSeason(1);
         setEpisodes([]);
       }, 300);
@@ -70,6 +72,20 @@ export function MediaDetailsModal() {
           if (mediaType === "series" || mediaType === "tv") {
             const defaultSeason = json.seasons?.find((s: any) => s.season_number > 0)?.season_number || 1;
             setSelectedSeason(defaultSeason);
+          }
+          
+          if (json.external_ids?.imdb_id) {
+            const omdbKey = process.env.NEXT_PUBLIC_OMDB_API_KEY;
+            if (omdbKey) {
+              fetch(`https://www.omdbapi.com/?apikey=${omdbKey}&i=${json.external_ids.imdb_id}`)
+                .then((r) => r.json())
+                .then((omdbJson) => {
+                  if (omdbJson.Response !== "False") {
+                    setOmdbData(omdbJson);
+                  }
+                })
+                .catch(console.error);
+            }
           }
         })
         .catch(() => {
@@ -178,10 +194,22 @@ export function MediaDetailsModal() {
                         : `${data.number_of_seasons || 1} Season${data.number_of_seasons > 1 ? 's' : ''}`}
                     </span>
                     <span className="rounded border border-border-subtle px-1 text-xs text-text-secondary">HD</span>
-                    <span className="flex items-center gap-1 text-text-primary">
+                    <span className="flex items-center gap-1 text-text-primary" title="TMDB Rating">
                       <Star size={14} className="fill-gold text-gold" />
                       {data.vote_average?.toFixed(1)}
                     </span>
+                    {omdbData?.imdbRating && omdbData.imdbRating !== "N/A" && (
+                      <span className="flex items-center gap-1 text-text-primary" title="IMDb Rating">
+                        <span className="rounded bg-[#f5c518] px-1 text-[10px] font-black text-black">IMDb</span>
+                        {omdbData.imdbRating}
+                      </span>
+                    )}
+                    {omdbData?.Ratings?.find((r: any) => r.Source === "Rotten Tomatoes") && (
+                      <span className="flex items-center gap-1 text-text-primary" title="Rotten Tomatoes">
+                        <span className="rounded bg-[#fa320a] px-1 text-[10px] font-black text-white">RT</span>
+                        {omdbData.Ratings.find((r: any) => r.Source === "Rotten Tomatoes").Value}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-3">

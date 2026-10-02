@@ -18,7 +18,7 @@ export async function GET(
 
   const V3_KEY_RE = /^[0-9a-f]{32}$/i;
   const url = new URL(`https://api.themoviedb.org/3/${type}/${id}`);
-  url.searchParams.set("append_to_response", "credits,similar");
+  url.searchParams.set("append_to_response", "credits,similar,external_ids");
   url.searchParams.set("language", "en-US");
 
   const headers: Record<string, string> = { accept: "application/json" };
