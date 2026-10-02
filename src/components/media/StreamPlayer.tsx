@@ -23,21 +23,27 @@ interface StreamServer {
 const STREAM_SERVERS: StreamServer[] = [
   {
     id: 1,
-    name: "Server 1 · VidSrc",
+    name: "Server 1",
     movieUrl: (id) => `https://vidsrc.to/embed/movie/${id}`,
     tvUrl: (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
   },
   {
     id: 2,
-    name: "Server 2 · AutoEmbed",
+    name: "Server 2",
+    movieUrl: (id) => `https://vidlink.pro/movie/${id}`,
+    tvUrl: (id, s, e) => `https://vidlink.pro/tv/${id}/${s}/${e}`,
+  },
+  {
+    id: 3,
+    name: "Server 3",
     movieUrl: (id) => `https://player.autoembed.cc/embed/movie/${id}`,
     tvUrl: (id, s, e) => `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`,
   },
   {
-    id: 3,
-    name: "Server 3 · MultiEmbed",
-    movieUrl: (id, imdbId) => `https://multiembed.mov/?video_id=${imdbId || id}&tmdb=${imdbId ? '0' : '1'}`,
-    tvUrl: (id, s, e, imdbId) => `https://multiembed.mov/?video_id=${imdbId || id}&tmdb=${imdbId ? '0' : '1'}&s=${s}&e=${e}`,
+    id: 4,
+    name: "Server 4",
+    movieUrl: (id) => `https://embed.su/embed/movie/${id}`,
+    tvUrl: (id, s, e) => `https://embed.su/embed/tv/${id}/${s}/${e}`,
   }
 ];
 
@@ -146,7 +152,7 @@ export function StreamPlayer({
               onClick={() => setStreamFailed(true)}
               className="px-3 py-1.5 text-xs font-semibold text-red-400 hover:text-red-300 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400"
             >
-              Report Broken
+              Stream Unavailable? Click Here
             </button>
           </nav>
         </div>
@@ -162,26 +168,37 @@ export function StreamPlayer({
           referrerPolicy="origin"
           allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
           allowFullScreen
-          className="h-full w-full border-0"
+          className="h-full w-full border-0 bg-black"
           title={`Streaming ${titleName} on ${server.name}`}
         />
       ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center bg-surface p-6 text-center">
-          <div className="mb-6 rounded-full bg-surface-lighter p-4 shadow-xl">
-            <Server size={32} className="text-text-secondary" />
+        <div className="flex h-full w-full flex-col items-center justify-center bg-black p-6 text-center">
+          <div className="absolute inset-0 z-0 bg-black">
+            <img
+              src={posterUrl || "/backdrop-fallback.svg"}
+              alt={titleName}
+              className="absolute inset-0 z-0 w-full h-full object-cover opacity-20 blur-sm"
+            />
+            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/80 to-black/40" />
           </div>
-          <h2 className="mb-2 font-display text-2xl font-semibold text-text-primary">
-            Stream Currently Unavailable
-          </h2>
-          <p className="max-w-md text-text-secondary">
-            We are unable to locate a working stream for <span className="font-semibold text-text-primary">{titleName}</span> across our fallback servers. This title may not be available on third-party hosts yet.
-          </p>
-          <button
-            onClick={() => setStreamFailed(false)}
-            className="mt-8 rounded-full border border-border-subtle px-6 py-2 text-sm font-semibold text-text-primary hover:bg-surface-lighter"
-          >
-            Try Again
-          </button>
+          
+          <div className="relative z-20 flex flex-col items-center justify-center">
+            <div className="mb-6 rounded-full bg-white/10 p-5 backdrop-blur-md">
+              <Server size={32} className="text-white" />
+            </div>
+            <h2 className="mb-3 font-display text-3xl font-bold text-white tracking-tight">
+              Stream Unavailable
+            </h2>
+            <p className="max-w-md text-lg text-white/70">
+              Full stream currently unavailable. Watch the trailer above.
+            </p>
+            <button
+              onClick={() => setStreamFailed(false)}
+              className="mt-8 rounded-full bg-white px-8 py-3 text-sm font-bold text-black transition-transform hover:scale-105 active:scale-95"
+            >
+              Retry Servers
+            </button>
+          </div>
         </div>
       )}
 
