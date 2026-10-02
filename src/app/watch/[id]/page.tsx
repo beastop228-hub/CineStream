@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 import { StreamPlayer } from "@/components/media/StreamPlayer";
-import { getTitleById, getTitleDetails, getTvSeasons } from "@/lib/tmdb";
+import { getTitleById, getTitleDetails, getTvSeasons, getExternalIds } from "@/lib/tmdb";
 
 const idSchema = z.string().regex(/^\d+$/, "TMDB id must be numeric");
 const typeSchema = z.enum(["movie", "tv"]);
@@ -58,10 +58,15 @@ export default async function WatchPage(props: PageProps<"/watch/[id]">) {
   const seasons =
     title.mediaType === "tv" ? await getTvSeasons(id) : [];
 
+  // Fetch external IDs (some fallback servers require IMDb IDs)
+  const externalIds = await getExternalIds(title.mediaType, id);
+  const imdbId = externalIds?.imdb_id;
+
   return (
     <StreamPlayer
       mediaType={title.mediaType}
       id={id}
+      imdbId={imdbId}
       season={season}
       episode={episode}
       titleName={title.title}

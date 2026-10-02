@@ -158,6 +158,15 @@ export async function getTitleById(id: string): Promise<MediaTitle | null> {
   return (await getTitleDetails("movie", id)) ?? getTitleDetails("tv", id);
 }
 
+// Fetches external IDs (like IMDb ID) for a specific TMDB title.
+export async function getExternalIds(
+  mediaType: MediaType,
+  id: string
+): Promise<{ imdb_id?: string } | null> {
+  const data = await tmdbFetch<{ imdb_id?: string }>(`/${mediaType}/${id}/external_ids`, {});
+  return data;
+}
+
 export interface TvSeasonSummary {
   seasonNumber: number;
   name: string;
