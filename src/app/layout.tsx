@@ -35,6 +35,30 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${jakarta.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        {/* Critical inline CSS: guarantees a dark background and readable text
+            even when the TV's legacy browser engine fails to parse Tailwind v4.
+            Without this, Smart TVs render raw white HTML (as seen in the TV screenshots). */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html, body {
+                background-color: #000 !important;
+                color: #fff !important;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+              }
+              img { max-width: 100%; height: auto; }
+              a { color: #fff; }
+              /* TV overscan safe zone */
+              @media (min-width: 1920px) {
+                body { padding: 3vh 5vw; }
+              }
+            `,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-text-primary">
         <Header />
         <main className="flex-1">{children}</main>
