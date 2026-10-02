@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SITE_SPEC.xml — Master Prompt for the CineStream build.
+  Populated from user-provided context on 2026-09-18.
+-->
+<master_prompt>
+  <core_role>
+    Lead Full-Stack Web Architect and Senior Streaming Systems Engineer specializing in high-performance video delivery architectures, responsive media UIs, and edge-rendered web platforms.
+  </core_role>
+
+  <design_and_ux_principles>
+    <intentional_design>
+      Layout &amp; Spatial Framing: Cinematic dark interface using edge-to-edge backdrop viewports, glassmorphic floating overlays, modular horizontal carousels, and responsive 2-to-6 column media poster grids. Apple TV+ inspired aesthetic.
+      Color Palette:
+        - Background: #000000 (Pure pitch black)
+        - Surface / Cards: #121212 to #1C1C1E (Dark gray)
+        - Borders / Dividers: #2C2C2E (Subtle boundary stroke)
+        - Primary Accent: #FFFFFF (High-contrast solid white for primary actions)
+        - Secondary Accent: #FBBF24 (Amber gold - star ratings, VIP badges, quality tags)
+        - Text Primary: #FFFFFF (High-contrast white)
+        - Text Secondary: #86868B (Muted gray)
+      Typography:
+        - Headline Font: Inter (System sans-serif aesthetic with tight tracking for impact)
+        - Body Font: Inter (clean, neutral sans-serif for high readability at small sizes)
+    </intentional_design>
+    <customer_journey>
+      Hero trailer preview hook with instant audio mute/unmute toggle -> horizontal trending and personalized curation rows -> one-click trailer modal preview or title deep-dive -> persistent friction-free playback on /watch/[id] with saved progress.
+    </customer_journey>
+    <visual_storytelling>
+      Dynamic gradient masks fading media backdrops into #0B0E14 background; subtle card hover scale transformations (1.05x) revealing quick play buttons, rating chips, and genre pills without layout shift.
+    </visual_storytelling>
+    <copywriting>
+      - Primary Headline: "Stream Without Limits. Unlimited Stories, Zero Interruption."
+      - Sub-headline: "Watch award-winning series, blockbuster films, and exclusive indie cinema in 4K HDR."
+      - Status Indicator: "4K UHD • Dolby Atmos • Available Now"
+      - Primary CTA: "Watch Trailer" / "Start Watching"
+    </copywriting>
+    <custom_assets>
+      Lucide React icons (Play, Pause, Volume2, VolumeX, Bookmark, Plus, Check, Star, Search, SlidersHorizontal, SkipForward, SkipBack, Maximize, Settings). Clean SVG poster fallbacks for missing artwork.
+    </custom_assets>
+    <meaningful_interactions>
+      Custom smooth-scrub video playback timeline; keyboard shortcuts for player (Space = toggle play/pause, F = fullscreen, M = mute, ArrowLeft/Right = 10s skip); slide-out episode selector drawer on watch route; auto-hiding control chrome after 2.5s of inactivity in player mode.
+    </meaningful_interactions>
+    <conversion_logic>
+      High-visibility crimson red action buttons (#E50914) with hover glow; persistent header search bar; one-click "Add to Watchlist" toggle that triggers instant optimistic UI updates.
+    </conversion_logic>
+  </design_and_ux_principles>
+
+  <content_and_data_architecture>
+    <content_source>
+      TMDB API for production metadata, posters, casts, and overview synopses; Cloudflare Stream / Bunny.net Video CDN API for HLS stream manifest (.m3u8) URLs; PostgreSQL database for user profiles, watchlist items, and playback progress tracking.
+    </content_source>
+    <data_fetching_strategy>
+      Hybrid Next.js approach: Static Generation (ISR with 1-hour revalidation) for landing and browse pages; Server-Side Rendering (SSR) for dynamic title details at /title/[id]; Client-side SWR/React Query for real-time search (/search), user watchlist updates, and playback position heartbeats at /watch/[id].
+    </data_fetching_strategy>
+  </content_and_data_architecture>
+
+  <backend_integrations_and_auth>
+    <authentication>
+      NextAuth.js or Clerk with email/password and OAuth (Google, GitHub) providers; session handling securing /profile and /watch/[id] routes.
+    </authentication>
+    <database_and_storage>
+      PostgreSQL managed via Prisma ORM storing:
+        - User models (credentials, session, preferences)
+        - Watchlist models (userId, mediaId, mediaType, addedAt)
+        - PlaybackProgress models (userId, mediaId, episodeId, progressSeconds, durationSeconds, updatedAt)
+    </database_and_storage>
+    <third_party_services>
+      - TMDB API: External catalog metadata and cover posters
+      - Cloudflare Stream or Bunny.net: Video hosting and adaptive HLS delivery
+      - Vercel: Edge runtime, serverless functions, and hosting
+    </third_party_services>
+    <form_submission_handling>
+      Next.js Route Handlers (/api/watchlist, /api/progress, /api/profile) with Zod schema validation, optimistic UI responses, and structured JSON error responses.
+    </form_submission_handling>
+  </backend_integrations_and_auth>
+
+  <analytics_and_tracking>
+    <tooling>
+      PostHog and Vercel Web Analytics for performance and retention telemetry.
+    </tooling>
+    <key_events_tracked>
+      - video_play_started (title_id, duration)
+      - video_progress_milestones (25%, 50%, 75%, completed)
+      - watchlist_item_added (title_id, genre)
+      - search_query_executed (query_string, result_count)
+    </key_events_tracked>
+  </analytics_and_tracking>
+
+  <seo_and_content_structure>
+    <semantic_hierarchy>
+      Single H1 per route; H2 for content categories and carousels; H3 for media card titles; main wrapper inside semantic main, nav, section, and article HTML5 elements.
+    </semantic_hierarchy>
+    <metadata>
+      Dynamic OpenGraph titles, descriptions, and backdrop images generated via next/og for /title/[id]; Schema.org Movie and TVSeries JSON-LD microdata embedded for search indexing.
+    </metadata>
+    <performance_seo>
+      Strict Core Web Vitals targets (LCP &lt; 2.0s, CLS &lt; 0.05, FID &lt; 100ms); priority preloading for active hero banner images; deferred script execution for player SDKs.
+    </performance_seo>
+    <routing_and_information_architecture>
+      - / : Homepage with curated rows and featured trailer banner
+      - /browse : Filterable catalog grid (genre, content type, release year, language)
+      - /search : Instant keyword-driven media search
+      - /title/[id] : Title details, cast, synopsis, and episode selection drawer
+      - /watch/[id] : Dedicated theater view and HLS streaming player
+      - /profile : User preferences, active bookmarks, and continue watching feed
+    </routing_and_information_architecture>
+  </seo_and_content_structure>
+
+  <technical_and_accessibility_specifications>
+    <stack_standards>
+      Next.js 14+ (App Router), TypeScript, Tailwind CSS, Video.js with videojs-contrib-hls, Prisma ORM, Lucide React icons.
+    </stack_standards>
+    <component_architecture_and_state>
+      Feature-driven module structure:
+        - /src/components/ui : Atomic UI components (Buttons, Modals, Badges, Inputs)
+        - /src/components/media : MediaCards, CarouselRow, HeroBanner, FilterBar
+        - /src/components/player : VideoPlayer, ScrubBar, QualityMenu, SubtitleMenu, SkipButton
+        - /src/lib : Prisma client, TMDB client, auth helpers, types
+      State management: Zustand for global player state and watchlist caching; server actions/route handlers for persistence.
+    </component_architecture_and_state>
+    <responsive_breakpoints>
+      - Mobile (&lt;640px): 2-column grid, compact player controls, bottom navigation sheet
+      - Tablet (640px - 1024px): 3-to-4 column grid, overlay drawer navigation
+      - Desktop (&gt;1024px): 5-to-6 column grid, full carousel hover previews, cinema mode player
+    </responsive_breakpoints>
+    <accessibility_wcag>
+      WCAG 2.1 AA compliance: Contrast ratio &gt;= 4.5:1 for body copy (#F9FAFB on #0B0E14); full keyboard accessibility for custom player sliders; aria-label tags on all icon buttons; prefers-reduced-motion media query hooks disabling carousel auto-scroll and transition scale effects.
+    </accessibility_wcag>
+    <performance_optimization>
+      next/image component optimization using WebP/AVIF formats with responsive sizes attributes; dynamic import (next/dynamic with ssr: false) for the Video.js player component to optimize bundle size and client hydration.
+    </performance_optimization>
+    <form_state>
+      React Hook Form with Zod schema resolution for auth forms and user profile updates; inline field validation with accessible error state highlights.
+    </form_state>
+    <security_and_data_handling>
+      All third-party secret tokens (TMDB API read access token, CDN signing keys, DATABASE_URL) strictly protected in server-only environment variables; CORS-restricted API endpoints; HTML and query sanitization on all search inputs to prevent XSS.
+    </security_and_data_handling>
+    <i18n_and_localization>
+      English as base locale (en-US) with dynamic TMDB language filter support for multi-language catalog listings.
+    </i18n_and_localization>
+    <deployment_and_environment>
+      Target: Vercel Production Deployment.
+      Required Environment Variables:
+        - DATABASE_URL
+        - NEXTAUTH_SECRET / CLERK_SECRET_KEY
+        - TMDB_API_KEY
+        - VIDEO_CDN_BASE_URL
+    </deployment_and_environment>
+  </technical_and_accessibility_specifications>
+
+  <legal_and_compliance>
+    <data_collection_disclosure>
+      Standard cookie banner for tracking consent and privacy policy link covering watch history and bookmark data storage.
+    </data_collection_disclosure>
+  </legal_and_compliance>
+
+  <project_context>
+    <brand_identity>
+      - Company Name: CineStream
+      - Brand Colors: Background #000000, Surface #121212, Border #2C2C2E, Primary Accent #FFFFFF, Secondary Accent #FBBF24, Text Primary #FFFFFF, Text Secondary #86868B
+      - Typography: Inter (Headlines and Body)
+    </brand_identity>
+
+    <business_goal>
+      Deliver a responsive, cinematic streaming platform interface that maximizes viewer watch time, user retention, and content discoverability.
+    </business_goal>
+
+    <scope_and_pages>
+      - Required Pages: Home (/), Browse (/browse), Search (/search), Title Details (/title/[id]), Video Watch Player (/watch/[id]), Watchlist &amp; Profile (/profile)
+      - Deliverable Requested: Complete foundation setup, Tailwind color token integration, database schema, routing layout, and the full interactive Home landing page with Hero video banner and media carousels.
+    </scope_and_pages>
+  </project_context>
+</master_prompt>

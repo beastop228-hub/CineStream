@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/* CineStream design tokens — Tailwind v4 CSS-first theme (per SITE_SPEC.xml) */
+@theme {
+  --color-background: #000000;
+  --color-surface: #121212;
+  --color-surface-lighter: #1c1c1e;
+  --color-border-subtle: #2c2c2e;
+  --color-accent: #ffffff;
+  --color-gold: #fbbf24;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #86868b;
+
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  /* Fluid typography baseline: scales from 14px up to 24px for TV readability */
+  font-size: clamp(14px, 1.5vw, 24px);
+  overscroll-behavior-y: none; /* Prevent bounce on TVs */
+}
+
+/* TV Spatial Navigation Focus Rings (10-Foot UI) */
+/* Map :hover to :focus-visible for a unified, high-contrast D-Pad experience */
+.tv-focus {
+  outline: none;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  will-change: transform; /* Hardware acceleration */
+}
+
+.tv-focus:focus-visible,
+.tv-focus:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px #ffffff, 0 0 20px rgba(255, 255, 255, 0.3);
+  z-index: 20;
+}
+
+/* Respect reduced-motion preferences (WCAG 2.1 AA) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

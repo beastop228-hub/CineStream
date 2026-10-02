@@ -1,0 +1,29 @@
+# Project Memory
+
+## Current State
+- **CineStream** streaming platform — foundation + interactive Home landing page complete and verified (build ✓, lint ✓).
+- `SITE_SPEC.xml` populated with the full CineStream Master Prompt (2026-09-18).
+- Next.js 16.3.5 (App Router, Turbopack) + TypeScript + Tailwind CSS v4 (CSS-first `@theme` tokens) scaffolded in workspace root.
+- Prisma pinned to **v6 stable** (v8 RC installed by default has a platform-only CLI with no `generate`/`migrate` — do not upgrade until v8 GA workflow is intended).
+- Home page (`/`) renders with ISR (1h revalidate): HeroBanner + 4 CarouselRows, using generated-default mock catalog until `TMDB_API_KEY` is set.
+
+## Durable Decisions
+- **Stack:** Next.js 16 App Router + TS + Tailwind v4 + Prisma 6 + Zustand + Lucide React + Zod.
+- **Tailwind v4:** tokens defined in `src/app/globals.css` `@theme` block (`background`, `surface`, `border-subtle`, `accent`, `gold`, `text-primary`, `text-secondary`; fonts `display`/`body` via `next/font` variables `--font-jakarta`/`--font-inter`).
+- **Next 16 API notes:** `next/image` uses `preload` prop (`priority` deprecated); layouts use typed `LayoutProps<"/">`.
+- **Data layer:** `src/lib/tmdb.ts` server-only client — returns mock data (`src/lib/mock-data.ts`, labeled generated defaults) when `TMDB_API_KEY` absent; real TMDB w/ 1h ISR when present.
+- **Watchlist state:** Zustand + localStorage persist (`src/store/watchlist.ts`); hydration-safe via `useSyncExternalStore` (React hooks lint forbids setState-in-effect).
+- **Scope:** auth/DB routes deferred; Prisma schema (User, WatchlistItem, PlaybackProgress) ready but no DB provisioned yet.
+- **Editor quirk:** `write_to_file` intermittently fails when target file is open in a VS Code tab ("User closed text editor"); fallback is shell heredoc (`cat > file << 'EOF'`).
+
+## Pending / Next Steps
+- [ ] Remaining routes: `/browse`, `/search`, `/title/[mediaType]/[id]`, `/watch/[mediaType]/[id]`, `/profile`, `/privacy`.
+- [ ] Video.js player + HLS integration (dynamic import, ssr:false) for `/watch`.
+- [ ] Auth (NextAuth or Clerk) + wire watchlist/progress to Prisma via `/api/watchlist`, `/api/progress` route handlers (Zod validation, rate limiting).
+- [ ] PostHog + Vercel Analytics instrumentation (events per SITE_SPEC: video_play_started, progress milestones, watchlist_item_added, search_query_executed).
+- [ ] Cookie consent banner + privacy policy page.
+- [ ] Provision Postgres + run `prisma migrate dev` when DB work begins.
+- [ ] Set env vars from `.env.example` (TMDB_API_KEY first to replace mock catalog).
+
+## Session Notes
+- 2026-09-18: Scaffolding + Home page delivered. `npx next build` passes (static `/` with 1h ISR), `npx eslint src --max-warnings=0` clean.
