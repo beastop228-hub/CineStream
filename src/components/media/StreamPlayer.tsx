@@ -149,11 +149,12 @@ export function StreamPlayer({
       </div>
 
       {/* Cloud-hosted stream player (re-mounts on server/episode switch via key).
-          No sandbox attribute: embed hosts require full frame permissions. */}
+          Sandboxed to block malicious ad pop-ups and top-level redirects. */}
       <iframe
         key={`${server.id}-${mediaType}-${id}-${season}-${episode}`}
         src={embedUrl}
         referrerPolicy="origin"
+        sandbox="allow-same-origin allow-scripts allow-forms"
         allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
         allowFullScreen
         className="h-full w-full border-0"
