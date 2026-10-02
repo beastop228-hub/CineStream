@@ -198,10 +198,10 @@ export function Header() {
                           <div className="flex flex-col overflow-hidden">
                             <span className="truncate font-semibold text-white">{result.title}</span>
                             <span className="truncate text-xs text-text-secondary flex items-center gap-1">
-                              {result.mediaType === "tv" ? "TV" : "Movie"} • {result.year} 
-                              {result.rating > 0 && (
+                              {result.mediaType === "tv" ? "TV" : "Movie"} • {result.releaseDate ? result.releaseDate.slice(0, 4) : ""} 
+                              {result.voteAverage > 0 && (
                                 <>
-                                  • <Star size={10} className="fill-accent text-accent inline-block" /> {result.rating.toFixed(1)}
+                                  • <Star size={10} className="fill-accent text-accent inline-block" /> {result.voteAverage.toFixed(1)}
                                 </>
                               )}
                             </span>
