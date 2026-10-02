@@ -103,6 +103,12 @@ export function StreamPlayer({
       <div className="absolute inset-x-0 top-4 z-10 flex items-start justify-between gap-2 px-4">
         <Link
           href="/"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.keyCode === 13) {
+              e.preventDefault();
+              router.push("/");
+            }
+          }}
           className="flex items-center gap-2 rounded-lg border border-border-subtle bg-surface/80 px-4 py-2 text-text-primary backdrop-blur-md transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <ArrowLeft className="h-5 w-5" aria-hidden="true" />
@@ -114,6 +120,12 @@ export function StreamPlayer({
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.keyCode === 13) {
+                  e.preventDefault();
+                  setDrawerOpen(true);
+                }
+              }}
               aria-label="Open episode list"
               className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface/80 px-3 py-2 text-sm font-semibold text-text-primary backdrop-blur-md transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
@@ -133,6 +145,13 @@ export function StreamPlayer({
                 key={s.id}
                 type="button"
                 onClick={() => { setServerId(s.id); setStreamFailed(false); }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.keyCode === 13) {
+                    e.preventDefault();
+                    setServerId(s.id);
+                    setStreamFailed(false);
+                  }
+                }}
                 aria-pressed={serverId === s.id}
                 title={s.name}
                 aria-label={`Switch to ${s.name}`}
@@ -150,6 +169,12 @@ export function StreamPlayer({
             <button
               type="button"
               onClick={() => setStreamFailed(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.keyCode === 13) {
+                  e.preventDefault();
+                  setStreamFailed(true);
+                }
+              }}
               className="px-3 py-1.5 text-xs font-semibold text-red-400 hover:text-red-300 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400"
             >
               Stream Unavailable? Click Here
@@ -194,6 +219,12 @@ export function StreamPlayer({
             </p>
             <button
               onClick={() => setStreamFailed(false)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.keyCode === 13) {
+                  e.preventDefault();
+                  setStreamFailed(false);
+                }
+              }}
               className="mt-8 rounded-full bg-white px-8 py-3 text-sm font-bold text-black transition-transform hover:scale-105 active:scale-95"
             >
               Retry Servers

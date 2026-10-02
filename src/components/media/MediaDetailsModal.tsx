@@ -142,6 +142,12 @@ export function MediaDetailsModal() {
               </span>
               <button 
                 onClick={closeModal}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.keyCode === 13) {
+                    e.preventDefault();
+                    closeModal();
+                  }
+                }}
                 tabIndex={0}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-text-primary hover:bg-black/60 transition-colors tv-focus"
               >
@@ -156,6 +162,7 @@ export function MediaDetailsModal() {
                   src={`https://image.tmdb.org/t/p/w1280${data.backdrop_path}`}
                   alt={data.title || data.name}
                   fill
+                  unoptimized={true}
                   className="object-cover"
                   priority
                 />
@@ -174,6 +181,7 @@ export function MediaDetailsModal() {
                       src={data.poster_path ? `https://image.tmdb.org/t/p/w342${data.poster_path}` : "/poster-fallback.svg"}
                       alt={data.title || data.name}
                       fill
+                      unoptimized={true}
                       className="object-cover"
                     />
                   </div>
@@ -218,6 +226,13 @@ export function MediaDetailsModal() {
                         closeModal();
                         router.push(`/watch/${mediaId}?type=${mediaType}`);
                       }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.keyCode === 13) {
+                          e.preventDefault();
+                          closeModal();
+                          router.push(`/watch/${mediaId}?type=${mediaType}`);
+                        }
+                      }}
                       tabIndex={0}
                       className="flex items-center gap-2 rounded-lg bg-white px-6 py-2.5 font-semibold text-black transition-transform hover:scale-105 tv-focus"
                     >
@@ -226,6 +241,12 @@ export function MediaDetailsModal() {
                     
                     <button 
                       onClick={() => toggle(normalizedType!, mediaId!)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.keyCode === 13) {
+                          e.preventDefault();
+                          toggle(normalizedType!, mediaId!);
+                        }
+                      }}
                       tabIndex={0}
                       className="flex items-center gap-2 rounded-lg bg-surface-lighter px-4 py-2.5 font-medium text-text-primary border border-border-subtle hover:bg-border-subtle transition-colors tv-focus"
                     >
@@ -234,7 +255,15 @@ export function MediaDetailsModal() {
                       <ChevronDown size={16} className="ml-1 opacity-60" />
                     </button>
                     
-                    <button tabIndex={0} className="flex h-[42px] w-[42px] items-center justify-center rounded-lg bg-surface-lighter border border-border-subtle hover:bg-border-subtle transition-colors tv-focus">
+                    <button 
+                      tabIndex={0} 
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.keyCode === 13) {
+                          e.preventDefault();
+                        }
+                      }}
+                      className="flex h-[42px] w-[42px] items-center justify-center rounded-lg bg-surface-lighter border border-border-subtle hover:bg-border-subtle transition-colors tv-focus"
+                    >
                       <MessageSquare size={18} />
                     </button>
                   </div>
@@ -278,6 +307,7 @@ export function MediaDetailsModal() {
                                 src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
                                 alt={person.name}
                                 fill
+                                unoptimized={true}
                                 className="object-cover"
                               />
                             ) : (
@@ -313,12 +343,20 @@ export function MediaDetailsModal() {
                               key={item.id} 
                               href={`/watch/${item.id}?type=movie`}
                               onClick={closeModal}
-                              className="group relative aspect-[2/3] overflow-hidden rounded-lg border border-border-subtle transition-transform hover:scale-105"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.keyCode === 13) {
+                                  e.preventDefault();
+                                  closeModal();
+                                  router.push(`/watch/${item.id}?type=movie`);
+                                }
+                              }}
+                              className="group relative aspect-[2/3] overflow-hidden rounded-lg border border-border-subtle transition-transform hover:scale-105 tv-focus"
                             >
                               <Image 
                                 src={item.poster_path ? `https://image.tmdb.org/t/p/w342${item.poster_path}` : "/poster-fallback.svg"}
                                 alt={item.title}
                                 fill
+                                unoptimized={true}
                                 className="object-cover"
                               />
                             </Link>
@@ -354,11 +392,18 @@ export function MediaDetailsModal() {
                           key={ep.episodeNumber}
                           href={`/watch/${mediaId}?type=tv&season=${selectedSeason}&episode=${ep.episodeNumber}`}
                           onClick={closeModal}
-                          className="group flex flex-col sm:flex-row gap-4 p-3 rounded-lg border border-transparent hover:border-border-subtle hover:bg-surface-lighter transition-colors"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.keyCode === 13) {
+                              e.preventDefault();
+                              closeModal();
+                              router.push(`/watch/${mediaId}?type=tv&season=${selectedSeason}&episode=${ep.episodeNumber}`);
+                            }
+                          }}
+                          className="group flex flex-col sm:flex-row gap-4 p-3 rounded-lg border border-transparent hover:border-border-subtle hover:bg-surface-lighter transition-colors tv-focus"
                         >
                           <div className="relative aspect-video w-full sm:w-40 shrink-0 overflow-hidden rounded-md bg-border-subtle">
                             {ep.stillUrl ? (
-                              <Image src={ep.stillUrl} alt={ep.name} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                              <Image src={ep.stillUrl} alt={ep.name} fill unoptimized={true} className="object-cover group-hover:scale-105 transition-transform duration-300" />
                             ) : (
                               <div className="absolute inset-0 flex items-center justify-center text-text-secondary opacity-50">
                                 <Play size={24} />

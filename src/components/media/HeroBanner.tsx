@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Star, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type { MediaTitle } from "@/lib/types";
 import { Badge } from "@/components/ui/Badge";
 
@@ -14,6 +15,7 @@ interface HeroBannerProps {
 }
 
 export function HeroBanner({ titles }: HeroBannerProps) {
+  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const activeTitle = titles[activeIndex];
   
@@ -89,12 +91,28 @@ export function HeroBanner({ titles }: HeroBannerProps) {
                 </p>
 
                 <div className="mt-8 flex flex-wrap items-center justify-center sm:justify-start gap-4">
-                  <Link href={`/watch/${title.id}?type=${title.mediaType}`} tabIndex={0} className="bg-white text-black hover:bg-gray-200 px-8 py-3 rounded-full font-bold transition-colors tv-focus">
+                  <Link 
+                    href={`/watch/${title.id}?type=${title.mediaType}`} 
+                    tabIndex={0} 
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.keyCode === 13) {
+                        e.preventDefault();
+                        router.push(`/watch/${title.id}?type=${title.mediaType}`);
+                      }
+                    }}
+                    className="bg-white text-black hover:bg-gray-200 px-8 py-3 rounded-full font-bold transition-colors tv-focus"
+                  >
                     Watch Now
                   </Link>
                   <button
                     type="button"
                     tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.keyCode === 13) {
+                        e.preventDefault();
+                        // Add to list or show more info action goes here
+                      }
+                    }}
                     className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition-colors hover:bg-white/30 tv-focus"
                   >
                     <Plus size={24} />

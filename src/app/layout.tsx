@@ -56,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 padding: 0;
               }
               /* Extreme fallback resets if Tailwind fails */
-              a { color: inherit !important; text-decoration: none !important; }
+              a { color: inherit; text-decoration: none !important; }
               ul, ol { list-style: none !important; padding: 0 !important; margin: 0 !important; }
               img { max-width: 100%; height: auto; }
               /* TV overscan safe zone */

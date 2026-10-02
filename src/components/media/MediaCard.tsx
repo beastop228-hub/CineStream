@@ -61,6 +61,12 @@ export function MediaCard({ title, fluid = false, href, variant = "standard", in
             openModal(title.id, title.mediaType as "movie" | "tv");
           }
         }}
+        onKeyDown={(e) => {
+          if (!href && (e.key === "Enter" || e.keyCode === 13)) {
+            e.preventDefault();
+            openModal(title.id, title.mediaType as "movie" | "tv");
+          }
+        }}
         className={`block overflow-hidden border border-border-subtle bg-surface tv-focus group-hover:shadow-2xl transition-shadow ${
           variant === "genre" ? "rounded-3xl" : "rounded-xl"
         }`}
@@ -71,6 +77,7 @@ export function MediaCard({ title, fluid = false, href, variant = "standard", in
             alt={`Poster for ${title.title}`}
             fill
             loading="lazy"
+            unoptimized={true}
             sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 15vw"
             className="object-cover"
           />
@@ -87,6 +94,12 @@ export function MediaCard({ title, fluid = false, href, variant = "standard", in
         type="button"
         tabIndex={0}
         onClick={() => toggle(title.mediaType, title.id)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.keyCode === 13) {
+            e.preventDefault();
+            toggle(title.mediaType, title.id);
+          }
+        }}
         aria-label={inList ? `Remove ${title.title} from watchlist` : `Add ${title.title} to watchlist`}
         aria-pressed={inList}
         className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-text-primary opacity-0 backdrop-blur-sm transition-all duration-200 tv-focus group-hover:opacity-100 focus-visible:opacity-100"

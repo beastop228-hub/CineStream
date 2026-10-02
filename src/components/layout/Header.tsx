@@ -184,6 +184,14 @@ export function Header() {
                             setIsSearchExpanded(false);
                             openModal(result.id, result.mediaType);
                           }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.keyCode === 13) {
+                              e.preventDefault();
+                              setQuery("");
+                              setIsSearchExpanded(false);
+                              openModal(result.id, result.mediaType);
+                            }
+                          }}
                           className="flex w-full items-center gap-3 px-4 py-2 text-left transition-colors tv-focus"
                         >
                           <div className="h-12 w-12 shrink-0 overflow-hidden rounded-md bg-black/50">
@@ -192,6 +200,7 @@ export function Header() {
                               alt={result.title}
                               width={48}
                               height={48}
+                              unoptimized={true}
                               className="h-full w-full object-cover"
                             />
                           </div>
