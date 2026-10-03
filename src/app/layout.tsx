@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import Script from "next/script";
 import dynamic from "next/dynamic";
 import { ClientTVDetector } from "@/components/ClientTVDetector";
 
@@ -138,7 +139,7 @@ const SPATIAL_NAV_SCRIPT = `
     }
   }
 
-  document.addEventListener('keydown', function(e) {
+  window.addEventListener('keydown', function(e) {
     var kc = e.keyCode || e.which;
 
     // Handle Back button — go to previous page
@@ -192,19 +193,20 @@ const SPATIAL_NAV_SCRIPT = `
   // Auto-focus the first interactive element after page loads
   // (so the user sees the focus ring immediately)
   function initialFocus() {
+    window.focus(); // Force window focus so key events fire
     var items = getAllFocusable();
-    if (items.length > 0 && (!document.activeElement || document.activeElement === document.body)) {
-      items[0].focus();
+    if (items.length > 0 && (!document.activeElement || document.activeElement === document.body || document.activeElement === document.documentElement)) {
+      focusElement(items[0]);
     }
   }
 
   // Run after DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(initialFocus, 500);
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initialFocus, 200);
     });
   } else {
-    setTimeout(initialFocus, 500);
+    setTimeout(initialFocus, 200);
   }
 })();
 `;
@@ -251,7 +253,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* SPATIAL NAVIGATION ENGINE — runs immediately as raw ES5 JavaScript.
             This does NOT depend on React. It intercepts arrow keys from the TV
             remote and moves browser focus between interactive elements. */}
-        <script dangerouslySetInnerHTML={{ __html: SPATIAL_NAV_SCRIPT }} />
+        <Script id="spatial-nav" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: SPATIAL_NAV_SCRIPT }} />
       </head>
       <body className="flex min-h-full flex-col bg-background text-text-primary">
         <ClientTVDetector />
