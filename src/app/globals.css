@@ -55,18 +55,32 @@ html[data-is-tv="true"] .backdrop-blur-xl {
 }
 
 /* TV Spatial Navigation Focus Rings (10-Foot UI) */
-/* Map :hover to :focus-visible for a unified, high-contrast D-Pad experience */
+/* Map :hover to :focus/:focus-visible for a unified, high-contrast D-Pad experience */
 .tv-focus {
   outline: none;
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
   will-change: transform; /* Hardware acceleration */
 }
 
+/* :focus comes FIRST for legacy TV browsers that don't support :focus-visible */
+.tv-focus:focus,
 .tv-focus:focus-visible,
 .tv-focus:hover {
   transform: scale(1.05);
   box-shadow: 0 0 0 4px #ffffff, 0 0 20px rgba(255, 255, 255, 0.3);
   z-index: 20;
+}
+
+/* 
+  UNIVERSAL FOCUS FALLBACK
+  For ANY focusable element that doesn't have .tv-focus, still show a visible
+  focus ring so the TV user always knows where they are on the page.
+*/
+a:focus,
+button:focus,
+[tabindex]:focus {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
 }
 
 /* Respect reduced-motion preferences (WCAG 2.1 AA) */
