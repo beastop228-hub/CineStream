@@ -69,10 +69,8 @@ const SPATIAL_NAV_SCRIPT = `
     var s = window.getComputedStyle(el);
     if (s.display === 'none' || s.visibility === 'hidden') return false;
     if (s.opacity === '0') return false;
-    // Check the element is not clipped entirely off-screen
-    var r = el.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > window.innerHeight + 200) return false;
-    if (r.right < 0 || r.left > window.innerWidth + 200) return false;
+    // We intentionally do NOT check if the element is off-screen!
+    // Carousel items are off-screen but MUST be focusable so the browser scrolls to them.
     return true;
   }
 
@@ -103,16 +101,16 @@ const SPATIAL_NAV_SCRIPT = `
       var ok = false;
       var dist = Infinity;
 
-      if (keyCode === KEY_LEFT && dx < -10) {
+      if (keyCode === KEY_LEFT && dx < 0) {
         ok = true;
         dist = Math.abs(dx) + Math.abs(dy) * 5;
-      } else if (keyCode === KEY_RIGHT && dx > 10) {
+      } else if (keyCode === KEY_RIGHT && dx > 0) {
         ok = true;
         dist = Math.abs(dx) + Math.abs(dy) * 5;
-      } else if (keyCode === KEY_UP && dy < -10) {
+      } else if (keyCode === KEY_UP && dy < 0) {
         ok = true;
         dist = Math.abs(dy) + Math.abs(dx) * 5;
-      } else if (keyCode === KEY_DOWN && dy > 10) {
+      } else if (keyCode === KEY_DOWN && dy > 0) {
         ok = true;
         dist = Math.abs(dy) + Math.abs(dx) * 5;
       }
@@ -141,6 +139,13 @@ const SPATIAL_NAV_SCRIPT = `
 
   window.addEventListener('keydown', function(e) {
     var kc = e.keyCode || e.which;
+    var key = e.key;
+
+    if (key === 'ArrowLeft') kc = KEY_LEFT;
+    if (key === 'ArrowUp') kc = KEY_UP;
+    if (key === 'ArrowRight') kc = KEY_RIGHT;
+    if (key === 'ArrowDown') kc = KEY_DOWN;
+    if (key === 'Enter') kc = KEY_ENTER;
 
     // Handle Back button — go to previous page
     if (kc === KEY_BACK_SAMSUNG || kc === KEY_BACK_LG || kc === KEY_BACK_GENERIC) {
