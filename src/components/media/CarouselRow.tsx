@@ -72,6 +72,12 @@ export function CarouselRow({ heading, titles, sectionId, variant = "standard" }
         <button
           type="button"
           onClick={() => emblaApi?.scrollPrev()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.keyCode === 13) {
+              e.preventDefault();
+              emblaApi?.scrollPrev();
+            }
+          }}
           disabled={!canPrev}
           aria-label={`Scroll ${heading} left`}
           className={`${arrowClasses} left-2 opacity-0 group-hover/row:opacity-100 disabled:pointer-events-none disabled:opacity-0 lg:opacity-0`}
@@ -81,6 +87,12 @@ export function CarouselRow({ heading, titles, sectionId, variant = "standard" }
         <button
           type="button"
           onClick={() => emblaApi?.scrollNext()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.keyCode === 13) {
+              e.preventDefault();
+              emblaApi?.scrollNext();
+            }
+          }}
           disabled={!canNext}
           aria-label={`Scroll ${heading} right`}
           className={`${arrowClasses} right-2 opacity-0 group-hover/row:opacity-100 disabled:pointer-events-none disabled:opacity-0 lg:opacity-0`}
