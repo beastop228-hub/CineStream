@@ -71,7 +71,7 @@ export function MediaCard({ title, fluid = false, href, variant = "standard", in
           variant === "genre" ? "rounded-3xl" : "rounded-xl"
         }`}
       >
-        <div className="relative aspect-[2/3] w-full">
+        <div className="relative pt-[150%] w-full">
           <Image
             src={title.posterUrl || "/poster-fallback.svg"}
             alt={`Poster for ${title.title}`}

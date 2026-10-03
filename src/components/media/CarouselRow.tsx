@@ -45,15 +45,8 @@ export function CarouselRow({ heading, titles, sectionId, variant = "standard" }
     };
   }, [emblaApi]);
 
-  function onKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      emblaApi?.scrollPrev();
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      emblaApi?.scrollNext();
-    }
-  }
+  // TV Spatial Navigation fix: We removed the custom ArrowLeft/Right listener
+  // to allow the TV's native focus engine to move between MediaCards natively.
 
   const arrowClasses =
     "absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface/90 text-text-primary shadow-lg backdrop-blur-sm transition-all duration-200 hover:border-text-secondary tv-focus";
@@ -107,7 +100,6 @@ export function CarouselRow({ heading, titles, sectionId, variant = "standard" }
           tabIndex={0}
           role="region"
           aria-label={heading}
-          onKeyDown={onKeyDown}
         >
           <ul className="flex gap-3 px-4 pb-2 sm:gap-4 sm:px-8 lg:px-12 2xl:px-[5vw]">
             {titles.map((title, i) => (

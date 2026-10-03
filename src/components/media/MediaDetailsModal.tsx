@@ -176,7 +176,7 @@ export function MediaDetailsModal() {
               <div className="flex flex-col sm:flex-row gap-6">
                 {/* Poster */}
                 <div className="shrink-0">
-                  <div className="relative aspect-[2/3] w-32 sm:w-48 overflow-hidden rounded-lg border-2 border-white/10 shadow-xl">
+                  <div className="relative pt-[150%] w-32 sm:w-48 overflow-hidden rounded-lg border-2 border-white/10 shadow-xl">
                     <Image
                       src={data.poster_path ? `https://image.tmdb.org/t/p/w342${data.poster_path}` : "/poster-fallback.svg"}
                       alt={data.title || data.name}
@@ -350,7 +350,7 @@ export function MediaDetailsModal() {
                                   router.push(`/watch/${item.id}?type=movie`);
                                 }
                               }}
-                              className="group relative aspect-[2/3] overflow-hidden rounded-lg border border-border-subtle transition-transform hover:scale-105 tv-focus"
+                              className="group relative pt-[150%] overflow-hidden rounded-lg border border-border-subtle transition-transform hover:scale-105 tv-focus"
                             >
                               <Image 
                                 src={item.poster_path ? `https://image.tmdb.org/t/p/w342${item.poster_path}` : "/poster-fallback.svg"}
@@ -401,7 +401,7 @@ export function MediaDetailsModal() {
                           }}
                           className="group flex flex-col sm:flex-row gap-4 p-3 rounded-lg border border-transparent hover:border-border-subtle hover:bg-surface-lighter transition-colors tv-focus"
                         >
-                          <div className="relative aspect-video w-full sm:w-40 shrink-0 overflow-hidden rounded-md bg-border-subtle">
+                          <div className="relative pt-[56.25%] w-full sm:w-40 shrink-0 overflow-hidden rounded-md bg-border-subtle">
                             {ep.stillUrl ? (
                               <Image src={ep.stillUrl} alt={ep.name} fill unoptimized={true} className="object-cover group-hover:scale-105 transition-transform duration-300" />
                             ) : (
